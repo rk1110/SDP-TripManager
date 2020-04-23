@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/login.css' %}">
+  <style>
+    .card{
+      margin-bottom: 5em;
+    }
+  </style>
+    {% if wrong %}
+      <script>
+        alert('username or password is incorrect');
+      </script>
+    {% endif %}
+  <!-- login form -->
+  <div class="container">
+    <div class="card bg-dark text-center mx-auto">
+      <div class="card-header">
+        <h2 style="color:darkorange">Welcome Back</h2>
+        <br>
+        <h4 class="text-white">Please login to your account</h4>
+      </div>
+      <div class="card-body">
+        <form action="/mytrip/auth/" method="POST">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}" />
+          <div>
+            <input type="text" class="mx-auto" id="email" placeholder="Enter username" name="username">
+          </div>
+          <div>
+            <input type="password" class="mx-auto" id="password" placeholder="Enter password"
+              name="password">
+          </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <br>
+          <h5 class="text-white"><br>OR<br>Sign up to register</h5>
+          <br>
+          <a href="/mytrip/signup" class="btn btn-success" role="button">Sign up</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

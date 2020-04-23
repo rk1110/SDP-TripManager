@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/home.css' %}">
+    <!-- <div id="loading"></div> -->
+  <img src="/static/mytrip/images/california.jpg" style="margin-top: 3.5em;" height="400px" width="100%">
+  <input class="centered text-center" type="search" placeholder="Where to?">
+  <div class="container" style="margin-top: 1em;">
+  	<div class="pull-right">
+  		<form action="/mytrip/home/">
+  			<!-- <select style="width: 7em;" name="order" id="myddl-order">
+		  		<option value="0">Ascending</option>
+		  		<option value="1">Descending</option>
+		  	</select> -->
+  			<select style="width: 5em;" name="distance" id="myddl-dist">
+		  		<option value="5">5 km</option>
+		  		<option value="10">10 km</option>
+		  		<option value="25">25 km</option>
+		  		<option value="50">50 km</option>
+		  		<option value="100">100 km</option>
+		  	</select>
+		  	<input type="hidden" name="lat" id="mylat">
+		  	<input type="hidden" name="lng" id="mylng">
+		  	<button class="btn btn-outline-success" style="margin-left: 0.5em;">Search nearby</button>
+  		</form>
+  	</div>
+  	<!-- <h3>You are in <span style="color: blue;">Nadiad!!</span></h3> -->
+    <br><br>
+    <br>
+    <!-- <div class="card-columns"> -->
+    {% for e in events %}
+    {% if e != None %}
+	    <div class="card" style="background-color: whitesmoke">
+	      <div class="card-header bg-dark">
+	      	<a href="/mytrip/event/{{ e.1 }}" style="color: darkorange;"><h3> {{ e.1 }} </h3></a>
+	      </div>
+	      <div class="card-body">
+	      	{% if e.12 != '' %}
+	      		<img class="pull-right" src="/media/{{ e.12 }}" alt="event1" style="width:15em;height:14em;margin-left: 1em;">
+	      	{% else %}
+	      		<img class="pull-right" src="/static/mytrip/images/upcoming-event.jpg" alt="event" style="width:15em;height:14em;margin-left: 1em;">
+	      	{% endif %}
+	        <h5><span style="color: darkorange;">Category:</span> {{ e.5 }} </h5>
+	        <h5><span style="color: darkorange;">Organized by:</span> {{ e.8 }} </h5>
+	        <h5><span style="color: darkorange;">Adress:</span> {{ e.2 }} </h5>
+	        <h5><span style="color: darkorange;">Contact no:</span> {{ e.7 }} </h5>
+	        <h5><span style="color: darkorange;">Price:</span>
+		        {% if e.9 == 0 %}
+		        <span class="text-success"> FREE</span>
+		        {% else %}
+		        <span><i class="fa fa-rupee"></i>{{ e.9 }}</span>
+	    	</h5>
+	        {% endif %}
+	        <h5><span style="color: darkorange;">Date:</span> {{ e.10 }} </h5>
+	        <h5><span style="color: darkorange;">Distance:</span> {{ e.13|floatformat }} km </h5>
+	      </div>
+	    </div>
+	<!-- </div> -->
+	    <br>
+	    <br>
+	   {% endif %}
+    {% endfor %}
+    <script>
+  	var distance = document.getElementById("myddl-dist");
+	distance.options[{{indexDist}}].selected = true;
+  	console.log(distance.options.selectedIndex)
+ //  	var order = document.getElementById("myddl-order");
+	// order.options[{{indexOrder}}].selected = true;
+ //  	console.log(order.options.selectedIndex)
+  </script>
+  </div>
+  <!-- <script>
+  	function hideLoader() {
+    $('#loading').hide();
+}
+
+$(window).ready(hideLoader);
+
+setTimeout(hideLoader, 10 * 1000);
+  </script> -->
+{% endblock %}

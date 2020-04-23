@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/signup.css' %}">
+    {% if error %}
+      <script>
+        alert('event already exists');
+      </script>
+    {% endif %}
+    <style>
+      /* select field style */
+    select{
+      width: 100%;
+      margin-bottom: 30px;
+      color: white;
+      border:none;
+      border-bottom: 1px solid darkorange;
+      padding-bottom: 5px;
+      background:transparent;
+      outline: none;
+      height:40px;
+    }
+    #new1{
+      display: none;
+      border-bottom: 1px solid yellow;
+    }
+    #addnew:hover{
+      cursor: pointer;
+    }
+    #error1, #error2{
+      display: none;
+      margin: 0px;
+      color: red;
+    }
+    </style>
+    <div class="container">
+    <div class="card bg-dark text-center mx-auto" style="margin-bottom: 2em;">
+      <div class="card-header">
+        <h2 style="color:darkorange">Event form</h2>
+        <h4 class="text-white">Register your new events here</h4>
+      </div>
+      <div class="card-body">
+        <form id="formData" action="/mytrip/newevent/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+          <div>
+            <input id="myevent" type="text" class="mx-auto" placeholder="event name" name="name" maxlength="50" required>
+            <span id="error1" name="myerror1" class="pull-right"><b>event already exists</b></span>
+          </div>
+          <div>
+            <input type="text" class="mx-auto" placeholder="event organizer name" name="orgname" required>
+          </div>
+          <div>
+            <input type="datetime-local" class="mx-auto" placeholder="date and time of event" name="event_date">
+          </div>
+          <div>
+            <input type="number" class="mx-auto" placeholder="capacity" name="capacity">
+          </div>
+          <div>
+            <input type="number" class="mx-auto" placeholder="price" name="price" required>
+          </div>
+          <div>
+            <select name="event_type" id="ddl" style="margin-bottom: 0;">
+              {% for t in types %}
+                <option value="{{ t.etype }}" style="color: black;"> {{ t.etype }} </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <input id="new1" type="text" class="mx-auto" placeholder="add new type" name="newtype">
+          </div>
+          <p id="addnew" style="margin-top: 1px;" class="pull-right text-warning" onclick="addnew()">add new</p>
+          <div>
+            <input type="number" id="mymobile" class="mx-auto" placeholder="contact no" name="contact">
+            <span id="error2" name="myerror2" class="pull-right"></span>
+          </div>
+          <div>
+            <input type="file" class="mx-auto" name="photo">
+          </div>
+          <button id="reg_btn" type="submit" class="btn btn-success">Submit</button><br>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    console.log("script started");
+    function addnew(){
+      var mytype = document.getElementById("new1");
+      mytype.style.display = "block";
+      var myddl = document.getElementById("ddl");
+      myddl.style.display = "none";
+      var myaddnew = document.getElementById("addnew");
+      myaddnew.style.display = "none";
+    }
+  </script>
+  <script>
+    console.log("script started");
+    $('document').ready(function(){
+      $('#myevent').on('blur', function(){
+        var eventnm = $('#myevent').val();
+        $.ajax({
+          url: '/mytrip/checkEvent/',
+          type: 'GET',
+          datatype: "json",
+          contentType: 'application/json',
+          data: {
+            'eventname': eventnm
+          },
+          success: function(response){
+            if (response == 'failure' ) {
+              var myevent = document.getElementById("myevent");
+              myevent.style.marginBottom = "0px";
+              myevent.focus();
+              var myerror = document.getElementById("error1");
+              myerror.style.display = "block";
+              myerror.style.marginBottom = "6px";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = true;
+            }else if (response == 'success') {
+              var myevent = document.getElementById("myevent");
+              myevent.style.marginBottom = "30px";
+              var myerror = document.getElementById("error1");
+              myerror.style.display = "none";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = false;
+            }
+          }
+        });
+      });
+      $('#mymobile').on('blur', function(){
+        var mobileno = $('#mymobile').val();
+        var filter = /^\d*(?:\.\d{1,2})?$/;
+        if (filter.test(mobileno)) {
+          if(mobileno.length!=10){
+            var mymobile = document.getElementById("mymobile");
+            mymobile.style.marginBottom = "0px";
+            mymobile.focus();
+            var myerror = document.getElementById("error2");
+            myerror.style.display = "block";
+            myerror.innerHTML = "<b>Please put 10 digit mobile number</b>"
+            myerror.style.color = "red";
+            myerror.style.marginBottom = "6px";
+            var regbtn = document.getElementById("reg_btn");
+            regbtn.disabled = true;
+          }
+          else{
+            var mymobile = document.getElementById("mymobile");
+            mymobile.style.marginBottom = "30px";
+            var myerror = document.getElementById("error2");
+            myerror.style.display = "none";
+            var regbtn = document.getElementById("reg_btn");
+            regbtn.disabled = false;
+          }
+        }else{
+          var mymobile = document.getElementById("mymobile");
+          mymobile.style.marginBottom = "0px";
+          mymobile.focus();
+          var myerror = document.getElementById("error2");
+          myerror.style.display = "block";
+          myerror.innerHTML = "<b>Not a valid number</b>"
+          myerror.style.color = "red";
+          myerror.style.marginBottom = "6px";
+          var regbtn = document.getElementById("reg_btn");
+          regbtn.disabled = true;
+        }
+      });
+    });
+  </script>
+{% endblock %}

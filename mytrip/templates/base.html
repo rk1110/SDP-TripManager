@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TripManager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            console.log(pos.lat);
+            console.log(pos.lng);
+            document.getElementById("mylat").value = pos.lat;
+            document.getElementById("mylng").value = pos.lng;
+            // document.getElementById("myform").submit();
+          }, function() {
+            console.log("location access blocked")
+            // handleLocationError(true, infoWindow, map.getCenter());
+          });
+
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+    </script>
+  </head>
+  <body>
+    <!-- navbar start -->
+    <nav class="navbar fixed-top navbar-expand-lg bg-dark navbar-dark">
+      <!-- brand name -->
+      <a class="navbar-brand" href="/mytrip/home">TripManager</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Things to do</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="">Events</a>
+          </li>
+          <!-- dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Explore</a>
+            <div class="dropdown-menu">     
+              <a class="dropdown-item" href="">Hotels</a>
+              <a class="dropdown-item" href="">Restaurants</a>
+              <a class="dropdown-item" href="">Movie Theaters</a>
+            </div>
+          </li>
+          <!-- contact -->
+          <li class="nav-item">
+            <a class="nav-link" href="">About Us</a>
+          </li>
+        </ul>
+        <!-- login -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            {% if usernm %}
+            <a class="nav-link" href="/mytrip/profile">{{ usernm }}</a>
+            {% else %}
+            <a class="nav-link" href="/mytrip/login">Login</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            {% if usernm %}
+            <a class="nav-link" href="/mytrip/logout">Logout</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- navbar end -->
+    <!-- <form id="myform" method="POST" action="/mytrip/home/">{% csrf_token %}
+      <input type="hidden" name="lat" id="lat">
+      <input type="hidden" name="lng" id="lng">
+    </form> -->
+    
+    {% block content %}
+    {% endblock %}
+    <!-- footer start -->
+<footer>
+  <div class="container-fluid bg-dark" style="color:darkorange;">
+    <br>
+    <div class="row">
+      <div class="col" style="margin: 0 0 0 10px;">
+        <h1 class="text-uppercase text-white" style="color:darkorange">TripManager</h1>
+        <h3>#ExploreNearby</h3>
+      </div>
+      <div class="col">
+        <h6 class="text-uppercase font-weight-bold" style="color:darkorange">Useful links</h6>
+        <hr class="bg-light">
+        <p>
+          <a href="/mytrip/profile" class="text-light">My Account</a>
+        </p>
+        <p>
+          <a href="" class="text-light">FAQ</a>
+        </p>
+        <p>
+          <a href="" class="text-light">Terms & Conditions</a>
+        </p>
+      </div>
+      <div class="col">
+        <h6 class="text-uppercase font-weight-bold" style="color:darkorange">Contact</h6>
+        <hr class="bg-light">
+        <p><a href="mailto:rutvik5101@gmail.com" class="text-light"><i class="fa fa-envelope" style="padding:0px 5px;"></i>
+            rutvik5101@gmail.com</a></p>
+        <a href="https://www.facebook.com/rutvik.kathrecha" class="text-white"><i class="fa fa-facebook fa-lg"
+            style="padding:0px 5px;"></i></a>
+        <a href="https://twitter.com/RutvikKathrecha" class="text-white"><i class="fa fa-twitter fa-lg"
+            style="padding:0px 5px;"></i></a>
+        <a href="https://www.linkedin.com/in/rutvik-kathrecha-91303b172/" class="text-white"><i
+            class="fa fa-linkedin fa-lg" style="padding:0px 5px;"></i></a>
+        <a href="https://www.instagram.com/rkathrecha_1110/" class="text-white"><i class="fa fa-instagram fa-lg"
+            style="padding:0px 5px;"></i></a>
+      </div>
+    </div>
+    <div class="footer-copyright text-center py-3 bg-dark-50">© {% now "Y" %} TripManager Pvt Ltd.</div>
+  </div>
+</footer>
+<!-- footer end -->
+  </body>
+</html>

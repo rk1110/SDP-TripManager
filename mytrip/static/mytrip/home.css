@@ -1,0 +1,30 @@
+h2{
+    color: dodgerblue;
+}
+#loading {
+  background: url('images/spinner.gif') no-repeat center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9999999;
+}
+.centered{
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+input{
+  margin-bottom: 50px;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  height:45px;
+  font-size: 20px;
+}
+::placeholder {
+  color: black;
+  font-weight: bold;
+}

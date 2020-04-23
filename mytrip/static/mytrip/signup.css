@@ -1,0 +1,44 @@
+    body{
+      background-image: url('images/fog.jpg');
+      background-size: cover;
+      opacity: 0.9;
+    }
+    /* input field style */
+    input{
+      width: 100%;
+      margin-bottom: 30px;
+      color: white;
+      border:none;
+      border-bottom: 1px solid darkorange;
+      padding-bottom: 5px;
+      background:transparent;
+      outline: none;
+      height:40px;
+    }
+    /* select field style */
+    select{
+      width: 100%;
+      margin-bottom: 30px;
+      color: white;
+      border:none;
+      border-bottom: 1px solid darkorange;
+      padding-bottom: 5px;
+      background:transparent;
+      outline: none;
+      height:40px;
+    }
+    /* card style */
+    .card{
+      margin-top: 5em;
+      max-width: 26rem;
+      min-height: 35rem;
+    }
+    /* card header style */
+    .card-header{
+      /* min-height: 8rem; */
+      margin-bottom: 1rem;
+    }
+    /* button width */
+    .btn{
+      width: 20rem;
+    }

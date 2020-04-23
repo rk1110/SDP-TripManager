@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+	<style>
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+	<script>
+		// Initialize and add the map
+		elat = {{ event.lat }}
+		elng = {{ event.lng }}
+		available = {{ avail }}
+		function initMap() {
+		  // The location of event
+		  var pos = {lat: elat, lng: elng};
+		  // The map, centered at event
+		  var map = new google.maps.Map(
+		      document.getElementById('map'), {zoom: 18, center: pos});
+		  // The marker, positioned at event
+		  var marker = new google.maps.Marker({position: pos, map: map});
+		  infoWindow = new google.maps.InfoWindow;
+		  infoWindow.setPosition(pos);
+          infoWindow.setContent('<b style="font-size: 1.2em;">Seats available: ' + available + '</b>');
+          infoWindow.open(map);
+		}
+    </script>
+    <script async defer
+    	src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+    <div style="margin-top: 5em;" class="container">
+    	{% if usr.id != event.org_id and reg != True %}
+    		<a href="/mytrip/register/{{ event.name }}" class="btn btn-primary pull-right">Register</a>
+    	{% endif %}
+    	<h3 style="color: blue;">{{ event.name }}</h3>
+    	<hr>
+    	{% if event.photo != '' %}
+	      	<img class="pull-right" src="/media/{{ event.photo }}" alt="event1" style="width:15em;height:14em;margin-left: 1em;margin-bottom: 2em;">
+	    {% else %}
+	    	<img class="pull-right" src="/static/mytrip/images/upcoming-event.jpg" alt="event" style="width:15em;height:14em;margin-left: 1em;margin-bottom: 2em;">
+	    {% endif %}
+    	<h5><b>Category:</b> {{ event.event_type }} </h5>
+	    <h5><b>Organized by:</b> {{ event.orgname }} </h5>
+	    <h5><b>Contact no:</b> {{ event.contact }} </h5>
+	    <h5><b>Price:</b>
+		    {% if event.price == 0 %}
+		    <span class="text-success"> FREE</span>
+		    {% else %}
+		    <span><i class="fa fa-rupee"></i>{{ event.price }}</span>
+	    </h5>
+	    {% endif %}
+	    <h5><b>Date:</b> {{ event.event_date }} </h5>
+	    <h5><b>Address:</b> {{ event.address }} </h5>
+	    
+    	<div id="map"></div>
+    	<br>
+    	<br>
+    </div>
+{% endblock %}

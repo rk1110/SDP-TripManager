@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+  <!-- {% load static %} -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'mytrip/home.css' %}"> -->
+  <div class="container">
+  	<h2 style="margin-top: 2.5em;color: darkorange;">Profile
+  	<a class="btn btn-outline-info pull-right" type="button" href="/mytrip/edit">Edit profile</a></h2>
+  	<hr>
+  	<p style="font-size: 20px;" class="text-dark">
+  	<b>Username:</b> {{ person.username }}<br>
+  	<b>Full name:</b> {{ person.first_name }} {{ person.last_name }}<br>
+  	<b>Email:</b> {{ person.email }}<br>
+  	<b>Mobile no:</b> {{ person.mobileno }}
+  	</p>
+  	<br>
+    <h2 style="margin-top: 1em;color: darkorange;">Your events
+    <a class="btn btn-outline-info pull-right" type="button" href="/mytrip/myevent">Add event</a></h2>
+    <hr>
+    <p class="text-center" style="font-size: 20px;">
+    	{% if myevent %}
+    	{% for event in myevent %}
+    		<a href="/mytrip/event/{{ event.name }}" class="text-dark"><h4>{{ forloop.counter }}. {{ event.name }}</h4></a>
+    	{% endfor %}
+    	{% else %}
+    	Your own events will appear here
+    	{% endif %}
+	</p>
+    <br>
+    <h2 style="margin-top: 1em;color: darkorange;">Your registered events</h2>
+    <hr>
+    <p class="text-center" style="font-size: 20px;">
+      {% if regevent %}
+      {% for reg in regevent %}
+        <a href="/mytrip/event/{{ reg.evnt.name }}" class="text-dark"><h4>{{ forloop.counter }}. {{ reg.evnt.name }}</h4></a>
+      {% endfor %}
+      {% else %}
+        Your registered events will appear here
+      {% endif %}
+    </p>
+  </div>
+  <br>
+{% endblock %}

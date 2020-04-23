@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/signup.css' %}">
+    {% if error %}
+      <script>
+        alert('both password must be same');
+      </script>
+    
+    {% endif %}
+    <style>
+      #error1, #error2, #error3, #error4{
+        display: none;
+        margin: 0px;
+        color: red;
+      }
+    </style>
+  <!-- signup form -->
+  <div class="container">
+    <div class="card bg-dark text-center mx-auto" style="margin-bottom: 2em;">
+      <div class="card-header">
+        <h2 style="color:darkorange">Welcome</h2>
+        <h4 class="text-white">New user please login here</h4>
+      </div>
+      <div class="card-body">
+        <form id="formData" action="/mytrip/create/" method="POST">{% csrf_token %}
+          <div>
+            <input type="text" class="mx-auto" placeholder="username" id="myuser" name="username" maxlength="20" required>
+            <span id="error1" name="myerror1" class="pull-right"><b>username already exists</b></span>
+          </div>
+          <div>
+            <input type="text" class="mx-auto" id="firstname" placeholder="Firstname" name="firstname" required>
+          </div>
+          <div>
+            <input type="text" class="mx-auto" id="lastname" placeholder="Lastname" name="lastname" required>
+          </div>
+          <div>
+            <input type="email" id="myemail" class="mx-auto" placeholder="Enter email" name="email" required>
+            <span id="error2" name="myerror2" class="pull-right"><b>email already exists</b></span>
+          </div>
+          <div>
+            <input type="password" class="mx-auto" id="password" placeholder="Password" name="password" minlength="8" required>
+          </div>
+          <div>
+            <input type="password" class="mx-auto" id="confirm_password" placeholder="Confirm password" name="password1" minlength="8" required>
+            <span id="error4" name="myerror4" class="pull-right"></span>
+          </div>
+          <div>
+            <input type="number" class="mx-auto" id="mymobile" placeholder="Mobile No" name="phone" required>
+            <span id="error3" name="myerror3" class="pull-right"></span>
+          </div>
+          <button type="submit" id="reg_btn" style="margin-top: 1em;" class="btn btn-success">Signup</button><br>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("script started");
+    $('document').ready(function(){
+      $('#myuser').on('blur', function(){
+        var username = $('#myuser').val();
+        $.ajax({
+          url: '/mytrip/checkUser/',
+          type: 'GET',
+          datatype: "json",
+          contentType: 'application/json',
+          data: {
+            'username': username
+          },
+          success: function(response){
+            if (response == 'failure' ) {
+              var myname = document.getElementById("myuser");
+              myname.style.marginBottom = "0px";
+              myname.focus();
+              var myerror = document.getElementById("error1");
+              myerror.style.display = "block";
+              myerror.style.marginBottom = "6px";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = true;
+            }else if (response == 'success') {
+              var myname = document.getElementById("myuser");
+              myname.style.marginBottom = "30px";
+              var myerror = document.getElementById("error1");
+              myerror.style.display = "none";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = false;
+            }
+          }
+        });
+      });
+
+      $('#myemail').on('blur', function(){
+        var emailid = $('#myemail').val();
+        $.ajax({
+          url: '/mytrip/checkEmail/',
+          type: 'GET',
+          datatype: "json",
+          contentType: 'application/json',
+          data: {
+            'myemail': emailid
+          },
+          success: function(response){
+            if (response == 'failure' ) {
+              var myemail = document.getElementById("myemail");
+              myemail.style.marginBottom = "0px";
+              myemail.focus();
+              var myerror = document.getElementById("error2");
+              myerror.style.display = "block";
+              myerror.style.marginBottom = "6px";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = true;
+            }else if (response == 'success') {
+              var myemail = document.getElementById("myemail");
+              myemail.style.marginBottom = "30px";
+              var myerror = document.getElementById("error2");
+              myerror.style.display = "none";
+              var regbtn = document.getElementById("reg_btn");
+              regbtn.disabled = false;
+            }
+          }
+        });
+      });
+
+      $('#mymobile').on('blur', function(){
+        var mobileno = $('#mymobile').val();
+        var filter = /^\d*(?:\.\d{1,2})?$/;
+        if (filter.test(mobileno)) {
+          if(mobileno.length==10){
+            $.ajax({
+              url: '/mytrip/checkMobile/',
+              type: 'GET',
+              datatype: "json",
+              contentType: 'application/json',
+              data: {
+                'mymobile': mobileno
+              },
+              success: function(response){
+                if (response == 'failure' ) {
+                  var mymobile = document.getElementById("mymobile");
+                  mymobile.style.marginBottom = "0px";
+                  mymobile.focus();
+                  var myerror = document.getElementById("error3");
+                  myerror.style.display = "block";
+                  myerror.innerHTML = "<b>mobileno already exists</b>"
+                  myerror.style.color = "red";
+                  myerror.style.marginBottom = "6px";
+                  var regbtn = document.getElementById("reg_btn");
+                  regbtn.disabled = true;
+                }else if (response == 'success') {
+                  var mymobile = document.getElementById("mymobile");
+                  mymobile.style.marginBottom = "30px";
+                  var myerror = document.getElementById("error3");
+                  myerror.style.display = "none";
+                  var regbtn = document.getElementById("reg_btn");
+                  regbtn.disabled = false;
+                }
+              }
+            });
+            $('#error3').html('Valid').css('color', 'green');
+          }else{
+            var mymobile = document.getElementById("mymobile");
+            mymobile.style.marginBottom = "0px";
+            mymobile.focus();
+            var myerror = document.getElementById("error3");
+            myerror.style.display = "block";
+            myerror.innerHTML = "<b>Please put 10 digit mobile number</b>"
+            myerror.style.color = "red";
+            myerror.style.marginBottom = "6px";
+            var regbtn = document.getElementById("reg_btn");
+            regbtn.disabled = true;
+          }
+        }else{
+          var mymobile = document.getElementById("mymobile");
+          mymobile.style.marginBottom = "0px";
+          mymobile.focus();
+          var myerror = document.getElementById("error3");
+          myerror.style.display = "block";
+          myerror.innerHTML = "<b>Not a valid number</b>"
+          myerror.style.color = "red";
+          myerror.style.marginBottom = "6px";
+          var regbtn = document.getElementById("reg_btn");
+          regbtn.disabled = true;
+        }
+      });
+    });
+ $('#password, #confirm_password').on('keyup', function () {
+    if ($('#password').val() == $('#confirm_password').val()) {
+      var mypass = document.getElementById("confirm_password");
+      mypass.style.marginBottom = "0px";
+      var myerror = document.getElementById("error4");
+      myerror.style.display = "block";
+      myerror.innerHTML = "<b>matching</b>"
+      myerror.style.color = "green";
+      myerror.style.marginBottom = "6px";
+      var regbtn = document.getElementById("reg_btn");
+      regbtn.disabled = false;
+    } else {
+      var mypass = document.getElementById("confirm_password");
+      mypass.style.marginBottom = "0px";
+      var myerror = document.getElementById("error4");
+      myerror.style.display = "block";
+      myerror.innerHTML = "<b>password not matching</b>"
+      myerror.style.color = "red";
+      myerror.style.marginBottom = "6px";
+      var regbtn = document.getElementById("reg_btn");  
+      regbtn.disabled = true;   
+    }
+});
+  </script>
+{% endblock %}

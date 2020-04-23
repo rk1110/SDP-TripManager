@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+	<style>
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+	<script>
+		// Initialize and add the map
+		elat = {{ event.lat }}
+		elng = {{ event.lng }}
+		available = {{ avail }}
+		function initMap() {
+		  // The location of event
+		  var pos = {lat: elat, lng: elng};
+		  // The map, centered at event
+		  var map = new google.maps.Map(
+		      document.getElementById('map'), {zoom: 18, center: pos});
+		  // The marker, positioned at event
+		  var marker = new google.maps.Marker({position: pos, map: map});
+		  infoWindow = new google.maps.InfoWindow;
+		  infoWindow.setPosition(pos);
+          infoWindow.setContent('<b style="font-size: 1.2em;">Seats available: ' + available + '</b>');
+          infoWindow.open(map);
+		}
+    </script>
+    <script async defer
+    	src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+    <div style="margin-top: 5em;" class="container">
+    	<button type="button" style="margin-left: 1em;" class="btn btn-outline-danger pull-right" data-toggle="modal" data-target="#myModal">Delete</button>
+
+    	<div class="modal fade" id="myModal" role="dialog">
+		    <div class="modal-dialog">
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		      	<div class="modal-header">
+		          <h4 class="modal-title text-primary">{{ event.name }}</h4>
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        <div class="modal-body">
+		          <h5>Are you sure you want to delete this event?<br>
+		      		<span style="color: red">You will have to refund all the registartions, if any.</span></h5>
+		          </div>
+        		  <div class="modal-footer">
+		          	<a href="/mytrip/deleteevent/{{ event.name }}" class="btn btn-outline-danger">Delete</a>
+		          </div>
+		      </div>
+		    </div>
+		</div>
+    	<a href="/mytrip/editevent/{{ event.name }}" class="btn btn-outline-primary pull-right">Edit event</a>
+    	<h3 style="color: darkorange;">{{ event.name }} - Organizer</h3>
+    	<hr>
+    	<div class="text-dark">
+    	{% if event.photo != '' %}
+	      	<img class="pull-right" src="/media/{{ event.photo }}" alt="event1" style="width:15em;height:14em;margin-left: 1em;margin-bottom: 2em;">
+	    {% else %}
+	    	<img class="pull-right" src="/static/mytrip/images/upcoming-event.jpg" alt="event" style="width:15em;height:14em;margin-left: 1em;margin-bottom: 2em;">
+	    {% endif %}
+    	<h5><b>Category:</b> {{ event.event_type }} </h5>
+	    <h5><b>Organized by:</b> {{ event.orgname }} </h5>
+	    <h5><b>Contact no:</b> {{ event.contact }} </h5>
+	    <h5><b>Price:</b>
+		    {% if event.price == 0 %}
+		    <span class="text-success"> FREE</span>
+		    {% else %}
+		    <span><i class="fa fa-rupee"></i>{{ event.price }}</span>
+	    </h5>
+	    {% endif %}
+	    <h5><b>Date:</b> {{ event.event_date }} </h5>
+	    <h5><b>Address:</b> {{ event.address }} </h5>
+		</div>
+    	<div id="map"></div>
+    	<br>
+    	<br>
+    	<a href="/mytrip/download/{{ event.name }}" class="btn btn-success pull-right">Download</a>
+    	<h3 style="color: darkorange;">Registeration Details</h3>
+    	<hr>
+    	<h5 style="color: blue;">Total Registrations: {{ registered }}</h5>
+    	<br>
+    	<table class="table table-hover">
+		    <thead>
+		      <tr>
+		        <th>Name</th>
+		        <th>Email</th>
+		        <th>Mobileno</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		    	{% for r in reguser %}
+	    			<tr>
+				        <td>{{ r.fullname }}</td>
+				        <td>{{ r.email }}</td>
+				        <td>{{ r.mobileno }}</td>
+			      	</tr>
+    			{% endfor %}
+		    </tbody>
+    	</table>
+    </div>
+{% endblock %}

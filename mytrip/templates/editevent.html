@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/signup.css' %}">
+   <style>
+	    /* card style */
+	    .card{
+	      margin-top: 7em;
+	      margin-bottom: 3em;
+	      max-width: 26rem;
+	      min-height: 5rem;
+	    }
+	</style>
+  <!-- edit form -->
+  <div class="container">
+    <div class="card bg-dark text-center mx-auto">
+    	<div class="card-header">
+        <h2 style="color:darkorange">Edit Event</h2>
+        <h4 style="color:darkorange">{{ e.name }}</h4>
+      </div>
+      <div class="card-body">
+
+        <form id="formData" action="/mytrip/editeventfinal/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+          <input type="hidden" name="ename" value="{{ e.name }}">
+          {% if e.photo != '' %}
+            <img src="/media/{{ e.photo }}" alt="event1" style="width:15em;height:14em;">
+          {% else %}
+            <img src="/static/mytrip/images/upcoming-event.jpg" alt="event" style="width:15em;height:14em;">
+          {% endif %}
+          <br>
+          <br>
+          <div>
+            <input type="file" class="mx-auto" name="photo">
+          </div>
+          <!-- <div>
+            <input type="datetime-local" class="mx-auto" placeholder="date and time of event" name="event_date" value="{{ e.event_date }}">
+          </div> -->
+          <div>
+            <input type="number" class="mx-auto" placeholder="capacity" name="capacity" value="{{ e.capacity }}">
+          </div>
+          <button type="submit" class="btn btn-success">Edit</button><br>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

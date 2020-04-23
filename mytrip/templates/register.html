@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% load static %}
+    	<link rel="stylesheet" type="text/css" href="{% static 'mytrip/signup.css' %}">
+    <style>
+    .card-header{
+      min-height: 4rem; 
+      /*margin-bottom: 1rem;*/
+    }
+    /* card style */
+    .card{
+      margin-top: 6em;
+      margin-bottom: 5em;
+      max-width: 26rem;
+      min-height: 5rem;
+    }
+    /* select field style */
+    select{
+      width: 100%;
+      margin-bottom: 30px;
+      color: white;
+      border:none;
+      border-bottom: 1px solid darkorange;
+      padding-bottom: 5px;
+      background:transparent;
+      outline: none;
+      height:40px;
+    }
+    </style>
+    <div class="container">
+    <div class="card bg-dark text-center mx-auto">
+      <div class="card-header">
+        <h2 style="color:darkorange">Event Registration</h2>
+      </div>
+      <div class="card-body">
+      	<h4 style="color:white">Event name: {{ event.name }}</h4>
+        <h4 style="color:white">Organized by: {{ event.orgname }}</h4>
+        <h4 style="color:white">Price:
+        	{% if event.price == 0 %}
+	        	<span style="color:green">FREE</span>
+	        {% else %}
+	        	<i class="fa fa-rupee"></i>{{ event.price }}
+	        {% endif %}
+	    </h4>
+	    <br>
+        <form id="formData" action="/mytrip/registerfinal/" method="POST">{% csrf_token %}
+        	<input type="hidden" name="ename" value="{{ event.name }}">
+          <div>
+            <input type="text" class="mx-auto" id="fullname" placeholder="Enter fullname" name="fullname" required>
+          </div>
+          <div>
+            <input type="email" class="mx-auto" placeholder="Enter email" name="email" required>
+          </div>
+          <div>
+            <input type="tel" class="mx-auto" placeholder="Mobile No" name="phone" required>
+          </div>
+          <button type="submit" class="btn btn-success">Register</button><br>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

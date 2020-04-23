@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mytrip/signup.css' %}">
+   <style>
+	    /* card style */
+	    .card{
+	      margin-top: 7em;
+	      margin-bottom: 3em;
+	      max-width: 26rem;
+	      min-height: 5rem;
+	    }
+	</style>
+  <!-- edit form -->
+  <div class="container">
+    <div class="card bg-dark text-center mx-auto">
+    	<div class="card-header">
+        <h2 style="color:darkorange">Edit Profile</h2>
+      </div>
+      <div class="card-body">
+        <form id="formData" action="/mytrip/editfinal/" method="POST">{% csrf_token %}
+          <div>
+            <input type="text" value="{{ person.username }}" class="mx-auto" placeholder="username" name="username" maxlength="20" required>
+          </div>
+          <div>
+            <input type="text" value="{{ person.first_name }}" class="mx-auto" id="firstname" placeholder="Firstname" name="firstname">
+          </div>
+          <div>
+            <input type="text" value="{{ person.last_name }}" class="mx-auto" id="lastname" placeholder="Lastname" name="lastname">
+          </div>
+          <div>
+            <input type="email" value="{{ person.email }}" class="mx-auto" placeholder="Enter email" name="email" required>
+          </div>
+          <div>
+            <input type="tel" value="{{ person.mobileno }}" class="mx-auto" placeholder="Mobile No" name="phone">
+          </div>
+          <button type="submit" class="btn btn-success">Edit</button><br>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
